@@ -50,7 +50,7 @@ function getCircleCircumference(radius) {
  *  -3, 3  => 0
  */
 function getAverage(value1, value2) {
-  return Number(value1 + value2) / 2;
+  return (BigInt(value1) + BigInt(value2)) / BigInt(2); /* global BigInt */
 }
 
 /**
@@ -106,11 +106,9 @@ function getLinearEquationRoot(a, b) {
  *   (0,1) (0,1)     => 0
  */
 function getAngleBetweenVectors(x1, y1, x2, y2) {
-  return (
-    (((x1 * x2 + y1 * y2) /
-      (Math.sqrt(x1 ** 2 + y1 ** 2) * Math.sqrt(x2 ** 2 + y2 ** 2))) *
-      Math.PI) /
-    180
+  return Math.acos(
+    (x1 * x2 + y1 * y2) /
+      (Math.sqrt(x1 ** 2 + y1 ** 2) * Math.sqrt(x2 ** 2 + y2 ** 2))
   );
 }
 
@@ -128,7 +126,7 @@ function getAngleBetweenVectors(x1, y1, x2, y2) {
  *     0     => 0
  */
 function getLastDigit(value) {
-  return value;
+  return value % 10;
 }
 
 /**
@@ -280,8 +278,9 @@ function getFibonacciNumber(index) {
  *   10 => 55 // (1+2+3+...+10)
  *   1  => 1
  */
-function getSumToN(/* n */) {
-  throw new Error('Not implemented');
+function getSumToN(n) {
+  const sum = n;
+  return sum <= 1 ? n : getSumToN(n - 1) + sum;
 }
 
 /**
@@ -295,8 +294,15 @@ function getSumToN(/* n */) {
  *   202 => 4  // (2+0+2)
  *   5   => 5  // 5
  */
-function getSumOfDigits(/* num */) {
-  throw new Error('Not implemented');
+function getSumOfDigits(num) {
+  const initialValue = 0;
+  return num
+    .toString()
+    .split('')
+    .reduce(
+      (accumulator, currentValue) => accumulator + Number(currentValue),
+      initialValue
+    );
 }
 
 /**
@@ -311,7 +317,7 @@ function getSumOfDigits(/* num */) {
  *   15  => false
  */
 function isPowerOfTwo(num) {
-  return 2 ** Math.log2(num) === num;
+  return Number.isInteger(Math.log2(num));
 }
 
 /**
@@ -418,7 +424,7 @@ function getNumberValue(number) {
  * '5'      => false
  */
 function isNumber(number) {
-  return !Number.isNaN(number);
+  return Number.isFinite(number) && !Number.isNaN(number);
 }
 
 /**
@@ -556,7 +562,7 @@ function getIntegerPartNumber(number) {
  * 0.1, 0.2, 0.3 => 0.6
  */
 function getSumOfNumbers(x1, x2, x3) {
-  return x1 + x2 + x3;
+  return +(x1 + x2 + x3).toFixed(12);
 }
 
 /**
@@ -588,7 +594,7 @@ function getMaxNumber(firstNumber, secondNumber) {
  * -1, 1 => -1 | 0 | 1
  */
 function getRandomInteger(min, max) {
-  return Math.random() * (max - min) + min;
+  return Math.round(Math.random() * (max - min) + min);
 }
 
 /**
@@ -618,8 +624,10 @@ function getHypotenuse(a, b) {
  * 10 => 5
  * 15 => 8
  */
-function getCountOfOddNumbers(/* number */) {
-  throw new Error('Not implemented');
+function getCountOfOddNumbers(number) {
+  return number % 2 === 0
+    ? Math.abs(number / 2)
+    : Math.ceil(Math.abs(number / 2));
 }
 
 module.exports = {
